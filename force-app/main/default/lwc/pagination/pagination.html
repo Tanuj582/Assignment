@@ -1,0 +1,41 @@
+<template>
+    <table  class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_fixed-layout">
+        <tbody>
+            <template for:each={contacts.data} for:item="contact" for:index="index">
+                <c-my-contact-item key={contact.id} item-name={contact} rowindex={index} ondeleterow={removeRow} oneditrow={EditRow} ></c-my-contact-item>
+            </template>
+        </tbody>
+    </table>
+    <table>
+	    <tbody>
+			<tr>
+                <td>
+                    <div class="slds-page-header" role="banner">
+                    <template if:true={previous}>
+                        <lightning-button class="slds-float_left"  variant="brand" label="Prev" onclick={handlePrev}></lightning-button>   
+                    </template>   
+                    <template if:true={next}>
+                        <lightning-button class="slds-float_right" variant="brand" label="Next" onclick={handleNext}></lightning-button>                
+                    </template>
+                    </div>
+                </td>
+            </tr><br>
+            <tr>
+                <td>
+                    <div class="slds-float_left" style="margin-left: 20px;">
+                        <p>Page: {PageNumber} of {TotalPages}</p>
+                    </div>
+                    <div class="slds-size_1-of-4 slds-float_right" style="margin-right: 20px;">
+                             Records per page:
+                        	 <select id="abc" class="slds-select" name = "pageSize" onchange={onSelectChange} style="max-width:53%;">
+								<option value="10" selected>10</option>
+								<option value="15">15</option>
+								<option value="20">20</option>
+							 </select>
+                    </div> 
+                </td>
+            </tr>
+	    </tbody>
+	</table>
+    </template> 
+</template>

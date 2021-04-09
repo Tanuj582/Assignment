@@ -1,0 +1,72 @@
+<aura:component >
+
+    <aura:attribute name="contact" type="Contact"/>
+    <aura:attribute name="rowIndex" type="Integer"/>
+    <aura:registerEvent name="DeleteRow" type="c:DeleteRow"/> 
+    <aura:registerEvent name="EditRow" type="c:EditRow"/>
+    <aura:attribute name="EditMode" type="boolean" default="false" />
+    
+    <aura:if isTrue="{!v.EditMode}">
+        <tr class="slds-hint-parent">
+            <th scope="row">
+                <div class="slds-truncate" title="Action">
+                    <a onclick="{!c.handleUpdateContact}" tabindex="-1">Save</a>
+                    /
+                    <a onclick="{!c.cancel}" tabindex="-1">Cancel</a>
+                </div>
+            </th>
+            <td role="gridcell">
+                <lightning:input aura:id="contactform" name="fname"
+                                 value="{!v.contact.FirstName}"
+                                 /> 
+            </td>
+            <td role="gridcell">
+                <lightning:input type="tel" aura:id="contactform" name="contactPhone"
+                                 value="{!v.contact.Phone}"
+                                 />
+            </td>
+            <td role="gridcell">
+                <lightning:input type="email" aura:id="contactform" name="contactemail"
+                                 value="{!v.contact.Email}"
+                                 />  
+            </td>
+            <td role="gridcell">
+                <lightning:input type="date" aura:id="contactform" name="contactdate"
+                                 value="{!v.contact.Birthdate}"
+                                 />
+            </td>
+            <td role="gridcell">
+                <lightning:input aura:id="contactform" name="contactDepartment"
+                                 value="{!v.contact.Department}"
+                                 />
+            </td> 
+        </tr>                  
+        <aura:set attribute="else">
+            <tr class="slds-hint-parent">
+                <th scope="row">
+                    <div class="slds-truncate" title="Action">
+                        <a onclick="{!c.deleteRow}" tabindex="-1">Del</a>
+                        /
+                        <a onclick="{!c.inlineEdit}" tabindex="-1">Edit</a>
+                    </div>
+                </th>
+                <td role="gridcell">
+                    <div class="slds-truncate" title="Name">{!v.contact.FirstName}&nbsp;{!v.contact.LastName}</div>
+                </td>
+                <td role="gridcell">
+                    <div class="slds-truncate" title="phone">{!v.contact.Phone}</div>
+                </td>
+                <td role="gridcell">
+                    <div class="slds-truncate" title="email">{!v.contact.Email}</div>
+                </td>
+                <td role="gridcell">
+                    <div class="slds-truncate" title="date">{!v.contact.Birthdate}</div>
+                </td>
+                <td role="gridcell">
+                    <div class="slds-truncate" title="Department">{!v.contact.Department}</div>
+                </td> 
+            </tr>                  
+        </aura:set>
+    </aura:if> 
+    
+</aura:component>

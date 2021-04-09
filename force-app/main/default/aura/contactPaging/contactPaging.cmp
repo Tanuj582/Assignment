@@ -1,0 +1,41 @@
+<aura:component controller="ContactController">
+    
+    <aura:attribute name="contacts" type="Contact[]"/>
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    <aura:attribute name="Selectedvalue" type="Integer" default="10"/>
+    <aura:attribute name="PageNumber" type="integer" default="1"/>
+    <aura:attribute name="TotalPages" type="integer" default="0"/>
+    <aura:attribute name="TotalRecords" type="integer" default="0"/>
+    <aura:attribute name="RecordStart" type="integer" default="0"/>
+    <aura:attribute name="RecordEnd" type="integer" default="0"/>
+    
+    <table>
+        <tbody>
+            <tr>
+                <td>
+                    <div class="slds-page-header" role="banner">
+                        <lightning:button class="slds-float_left" variant="brand" aura:id="prevPage" label="Prev" onclick="{!c.handlePrev}" />            
+                        
+                        <lightning:button class="slds-float_right" aura:id="nextPage" variant="brand" label="Next" onclick="{!c.handleNext}"/>                
+                    </div>
+                </td>
+            </tr>
+            <br/>
+            <tr>
+                <td>
+                    <div class="slds-float_left" style="margin-left: 20px;">
+                        <p>{!v.RecordStart}-{!v.RecordEnd} of {!v.TotalRecords} | Page {!v.PageNumber} of {!v.TotalPages}</p>
+                    </div>
+                    <div class="slds-size_1-of-4 slds-float_right" style="margin-right: 20px;">
+                        <lightning:select aura:id="pageSize" name="pageSize" label="Records Per Page:" value="{!v.Selectedvalue}" onchange="{!c.onSelectChange}" required="true">
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                        </lightning:select>   
+                    </div> 
+                </td>
+            </tr><br/>
+        </tbody>                
+    </table>
+    
+</aura:component>
