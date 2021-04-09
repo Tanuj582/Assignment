@@ -1,0 +1,50 @@
+<aura:component >
+   
+    <aura:registerEvent name="createContact" type="c:ItemUpdate"/>
+    <aura:attribute name="newContact" type="Contact"
+                    default="{ 'sobjectType': 'Contact',
+                             'FirstName': '',
+                             'LastName': '',
+                             'Phone': '',
+                             'Email': '',
+                             'Birthdate': '',
+                             'Department': '' }"/>
+    
+    <div aria-labelledby="newcontactform">
+        <fieldset class="slds-box slds-theme_default slds-container_small">
+            <legend id="newcontactform" class="slds-text-heading_small
+                                               slds-p-vertical_medium">Add Contact
+            </legend>
+            <form class="slds-form_stacked">
+                <lightning:input aura:id="contactform" label="First Name"
+                                 name="fname"
+                                 value="{!v.newContact.FirstName}"/>  
+                <lightning:input aura:id="contactform" label="Last Name"
+                                 name="lname"
+                                 value="{!v.newContact.LastName}"
+                                 required="true"/>   
+                <lightning:input type="tel" aura:id="contactform" label="Phone No."
+                                 name="contactPhone"
+                                 value="{!v.newContact.Phone}"
+                                 required="true"
+                                 />
+                <lightning:input type="email" aura:id="contactform" label="Email"
+                                 name="contactemail"
+                                 value="{!v.newContact.Email}"
+                                 placeholder="username@example.com"
+                                 />                                  
+                <lightning:input type="date" aura:id="contactform" label="Contact Date"
+                                 name="contactdate"
+                                 value="{!v.newContact.Birthdate}"/>
+                <lightning:input aura:id="contactform" label="Department"
+                                 name="contactDepartment"
+                                 value="{!v.newContact.Department}"/>
+                <lightning:button label="Create Contact"
+                                  class="slds-m-top_medium"
+                                  variant="brand"
+                                  onclick="{!c.clickCreate}"/>
+            </form>
+        </fieldset>
+    </div>
+    
+</aura:component>

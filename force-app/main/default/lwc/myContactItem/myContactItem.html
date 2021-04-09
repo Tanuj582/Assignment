@@ -1,0 +1,55 @@
+<template>
+    <table class="slds-table slds-table_cell-buffer slds-table_fixed-layout">
+    <tbody>
+    <template if:true={EditMode}>
+            <td scope="row">
+                <div class="slds-truncate" title="Action">
+                    <a onclick={handleUpdateContact} data-record-id={contact.Id}>Save</a>
+                     / 
+                    <a onclick={cancel}>Cancel</a>
+                </div>
+            </td>
+            <td scope="row">
+                <lightning-input name="fname" value={contact.FirstName} onchange={fnameInpChange} ></lightning-input>
+                <lightning-input name="lname" value={contact.LastName} onchange={lnameInpChange}></lightning-input> 
+            </td>
+            <td scope="row">
+                <lightning-input type="phone" name="contactPhone" value={contact.Phone} onchange={phoneInpChange} ></lightning-input>
+            </td>
+            <td scope="row">
+                <lightning-input type="email" name="contactemail" value={contact.Email} onchange={emailInpChange} ></lightning-input>
+            </td>
+            <td scope="row">
+                <lightning-input type="date" name="contactdate" value={contact.Birthdate} onchange={dateInpChange} ></lightning-input>
+            </td>
+            <td scope="row">
+                <lightning-input  name="contactDepartment" value={contact.Department} onchange={departmentInpChange} ></lightning-input>
+            </td> 
+    </template>
+    <template if:false={EditMode}>
+            <th scope="col">
+                <div class="slds-truncate" title="Action">
+                    <a onclick={deleteRow} data-record-id={contact.Id}>Del</a>
+                      / 
+                    <a onclick={inlineEdit}>Edit</a>
+                </div>
+            </th>
+            <td role="gridcell">
+                <div class="slds-truncate" title="Name">{contact.FirstName}&nbsp;{contact.LastName}</div>
+            </td>
+            <td role="gridcell">
+                <div class="slds-truncate" title="phone">{contact.Phone}</div>
+            </td>
+            <td role="gridcell">
+                <div class="slds-truncate" title="email">{contact.Email}</div>
+            </td>
+            <td role="gridcell">
+                <div class="slds-truncate" title="date">{contact.Birthdate}</div>
+            </td>
+            <td role="gridcell">
+                <div class="slds-truncate" title="Department">{contact.Department}</div>
+            </td> 
+    </template>
+    </tbody>
+    </table>    
+</template>

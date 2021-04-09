@@ -1,0 +1,27 @@
+<template>
+	<div style="margin-left:450px;">
+        <fieldset class="slds-box slds-theme_default slds-container_small">
+            <legend class="slds-text-heading_small
+                           slds-p-vertical_medium">Add Contact
+            </legend>
+            <form class="slds-form_stacked">
+                <lightning-input type="text"  label="First Name" value={ContactRecord.FirstName} 
+                                 onchange={handleFNameChange}></lightning-input>
+                <lightning-input type="text"  label="Last Name" value={ContactRecord.LastName} 
+                                 required="true" onchange={handleLNameChange}></lightning-input>
+				<lightning-input type="phone" label="Phone" value={ContactRecord.Phone} 
+                                 onchange={handlePhoneChange} required=true></lightning-input>
+				<lightning-input type="email" label="Email" value={ContactRecord.Email} 
+                                 onchange={handleEmailChange} placeholder="username@example.com"></lightning-input>
+				<lightning-input type="date"  label="Birthdate" value={ContactRecord.Birthdate} 
+                                 onchange={handleBirthdateChange}></lightning-input>
+				<lightning-input type="text"  label="Department" value={ContactRecord.Department} 
+                                 onchange={handleDepartmentChange}></lightning-input>
+                <lightning-button label="Create Contact" onclick={handleSave} variant="brand"></lightning-button>
+            </form>
+        </fieldset>
+    </div>
+    <div>  
+        <c-my-contact-table></c-my-contact-table>            
+    </div>
+</template>
