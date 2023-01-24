@@ -1,0 +1,229 @@
+<aura:component controller="getRecords" implements="flexipage:availableForAllPageTypes">
+	
+    <aura:attribute name="objectName" type="String" default="Account"/>
+    <aura:attribute name="records" type="List"/>
+    <aura:attribute name="selected" type="String[]"/>
+    <aura:attribute name="selectedRecords" type="Integer" default='0'/>
+    <aura:attribute name="toggleSpinner" type="boolean" default="false"/>
+    <aura:attribute name="showToast" type="Boolean" default="false"/>
+    <aura:attribute name="message" type="String"/>
+    
+    <aura:attribute name="recordId" type="Id"/>
+    <aura:attribute name="showModal" type="Boolean" default="false"/>
+    <aura:attribute name="ViewMode" type="Boolean" default="true"/>
+    <aura:attribute name="EditMode" type="Boolean" default="true"/>
+    <aura:attribute name="mode" type="String"/>   
+
+    <aura:attribute name="fields" type="String[]"/>
+    
+    <aura:attribute name="Selectedvalue" type="Integer" default="5"/>
+    <aura:attribute name="PageNumber" type="integer" default="1"/>
+    <aura:attribute name="TotalPages" type="integer" default="0"/>
+    <aura:attribute name="TotalRecords" type="integer" default="0"/>
+    <aura:attribute name="RecordStart" type="integer" default="0"/>
+    <aura:attribute name="RecordEnd" type="integer" default="0"/>
+    
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+    
+    
+    
+    <!-- Toast -->    
+    <aura:if isTrue="{!v.showToast}">
+    <div class="slds-notify_container slds-is-relative">
+            <div class="slds-notify slds-notify_toast slds-theme_success" role="status">
+                <span class="slds-assistive-text">success</span>
+              	<span class="slds-icon_container slds-icon-utility-success slds-icon-utility-success slds-m-right_small slds-no-flex slds-align-top" title="success">
+                    <lightning:icon iconName="utility:success" size="small" variant="inverse" styleclass="slds-icon slds-icon_small"/>
+                </span>
+                <div class="slds-notify__content">
+                    <h2 class="slds-text-heading_small ">{!v.message}</h2>
+                </div>
+                <div class="slds-notify__close">
+                    <button class="slds-button slds-button_icon slds-button_icon-inverse" title="Close" onclick="{!c.closeToast}">
+                        <lightning:icon iconName="utility:close" size="small" variant="inverse"/>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                </div>
+            </div>
+	</div>  
+    </aura:if>
+    
+    
+    
+    <!-- Tabs -->
+	 <lightning:tabset selectedTabId="{!v.objectName}" onselect="{!c.tabSelected}">
+        <lightning:tab label="Account" id="Account">
+            
+        </lightning:tab>
+        <lightning:tab label="Contact" id="Contact">
+     
+        </lightning:tab>
+        <lightning:tab label="Lead" id="Lead">
+           
+        </lightning:tab>
+         <lightning:tab label="Opportunity" id="Opportunity">
+           
+        </lightning:tab>
+    </lightning:tabset>
+
+    
+    
+    <!-- New and Delete Buttons -->
+    <aura:if isTrue="{!and(v.EditMode, v.ViewMode)}">
+    <div>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Selected Records:{!v.selectedRecords}
+        <lightning:buttonGroup class="slds-float_right">
+             <lightning:button variant="brand" label="{!'New ' + v.objectName}" onclick="{!c.create}"/>&nbsp;&nbsp;   
+       		 <lightning:button variant="destructive" label="Delete Selected" onclick="{!c.delete}"/>&nbsp;&nbsp;   
+        </lightning:buttonGroup>
+    </div>
+    <br/><br/>
+        
+        
+        
+    <!-- Create New Record -->
+    <aura:if isTrue="{!v.showModal}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                
+                <header class="slds-modal__header">
+                    <lightning:buttonIcon iconName="utility:close" onclick="{!c.Modalclose}" alternativeText="Close" variant="bare-inverse"
+                                          class="slds-modal__close"/>
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Create New {!v.objectName}</h2>
+                </header>
+                
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    
+				<lightning:recordForm objectApiName="{!v.objectName}" layoutType="Full" columns="2"/>
+                </div>
+                
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+
+    
+                
+    <!-- Spinner -->    
+    <div>
+    	<aura:if isTrue="{!v.toggleSpinner}">
+               <div class="demo-only demo-only_viewport slds-float_center" style="height:4rem;position:relative;overflow:auto;">
+                 <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand" style="position:absolute;">
+                                    <span class="slds-assistive-text">Loading</span>
+                                    <div class="slds-spinner__dot-a"></div>
+                                    <div class="slds-spinner__dot-b"></div>
+                 </div>
+               </div>
+       </aura:if>
+    </div>    
+        
+        
+        
+    <!-- Record Table -->
+    <div>
+    <table class="slds-table slds-table_cell-buffer slds-no-row-hover slds-table_bordered slds-table_fixed-layout" role="grid" style="width:100%;">
+        <thead>
+            <tr class="slds-line-height_reset">
+                <th class="" scope="col">
+                    <div class="slds-truncate">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        {!v.objectName} Name
+                    </div>
+                </th>
+                <th class="" scope="col">
+                    <div class="slds-truncate">Phone</div>
+                </th>
+                <th class="" scope="col">
+                    <div class="slds-truncate">{!v.objectName} Description</div>
+                </th>
+                <th class="" scope="col">
+                    <div class="slds-truncate">Email</div>
+                </th>
+                <th class="" scope="col">
+                    <div class="slds-truncate">Type</div>
+                </th>
+                <th class="" scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+             <aura:iteration items="{!v.records}" var="rec" indexVar="index">
+             <tr class="slds-hint-parent" ondblclick="{!c.showRow}" data-record="{!rec.Id}">
+             	<td role="gridcell" style="padding-top:5px;padding-bottom:2px;">
+                    <div class="slds-truncate" title="{!rec.Name}">
+			    		<input type="checkbox" name="chk" id="{!rec.Id}" onchange="{!c.selectedRecords}"/>&nbsp;&nbsp;&nbsp;&nbsp;
+                        {!rec.Name}
+                    </div>
+                </td>
+                <td>
+                    <div class="slds-truncate">
+                        {!rec.Phone}
+                    </div>
+                </td>
+                <td>
+                    <div class="slds-truncate">
+                        {!rec.Description}
+                    </div>
+                </td>
+                <td>
+                    <div class="slds-truncate">
+                        {!rec.Email}
+                    </div>
+                </td>
+                <td>
+                    <div class="slds-truncate">
+                        {!rec.Type}
+                    </div>
+                </td>
+                <td>
+                    <div class="slds-p-around_small container lgc-bg">
+            			<lightning:buttonMenu alternativeText="More options" onselect="{!c.handleSelect }" iconSize="small" aura:id="editDeleteView" class="{!rec.Id}">
+               				    <lightning:menuItem value="Edit" label="Edit" />
+                            	<lightning:menuItem value="View" label="View" />
+                				<lightning:menuItem value="Delete" label="Delete"/>                	
+            			</lightning:buttonMenu>
+       				 </div>
+                </td>
+             </tr>            
+             </aura:iteration>  
+        </tbody>
+    </table>
+	</div>
+        
+        
+        
+    <!-- Pagination -->
+    <table>
+    	<tbody>
+            <tr>
+                <td>
+                    <div class="slds-float_left" style="margin-left: 30px;">
+                        <p>{!v.TotalRecords} items | page {!v.PageNumber} of {!v.TotalPages}</p>
+                    </div>
+                </td>
+                <td>
+                    <div class="slds-page-header" role="banner">
+                        <lightning:button  variant="brand" aura:id="prevPage" label="Prev" onclick="{!c.handlePrev}" />            
+                        
+                        <lightning:button  aura:id="nextPage" variant="brand" label="Next" onclick="{!c.handleNext}"/>              
+                    </div> 
+                </td>
+                <td>
+                    <div class="slds-size_1-of-4 slds-float_right" style="margin-right: 30px;">
+                        <lightning:select aura:id="pageSize" name="pageSize" label="Record Size:" value="{!v.Selectedvalue}" onchange="{!c.onSelectChange}" required="true">
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                        </lightning:select>   
+                    </div> 
+                </td>
+            </tr><br/>
+        </tbody>                
+    </table>
+    
+    <aura:set attribute="else">
+        &nbsp;&nbsp;&nbsp;&nbsp;<a onclick="{!c.goBack}">Go Back...</a><br></br><br></br>
+        <lightning:recordForm recordId="{!v.recordId}" objectApiName="{!v.objectName}" columns="2" layoutType="Compact" mode="{!v.mode}"/>   	
+    </aura:set>
+    </aura:if>
+    
+</aura:component>
